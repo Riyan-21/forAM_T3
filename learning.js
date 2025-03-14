@@ -1,0 +1,212 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+import { getDatabase, ref, push, set, remove, get, child, update, onValue } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
+
+const firebaseConfig = { 
+  apiKey: "AIzaSyAg9muPskcqhsJthpSjtKuqY4xp0KtRrWA",
+  authDomain: "foram4221.firebaseapp.com",
+  databaseURL: "https://foram4221-default-rtdb.firebaseio.com",
+  projectId: "foram4221",
+  storageBucket: "foram4221.firebasestorage.app",
+  messagingSenderId: "657441502543",
+  appId: "1:657441502543:web:2648c1f8d7ac25329e813a",
+  measurementId: "G-1WJQG0L7W9" 
+};
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+let box1 = document.getElementById("box1");
+let box2 = document.getElementById("box2");
+let box3 = document.getElementById("box3");
+let box4 = document.getElementById("box4");
+let box5 = document.getElementById("box5");
+let box6 = document.getElementById("box6");
+let box7 = document.getElementById("box7");
+let box8 = document.getElementById("box8");
+let box9 = document.getElementById("box9");
+
+function updateA(b, box){
+  onValue(ref(database, `holder/-OLF616Zr5LkBeORsx30/${b}`), (snapshot)=>{
+    box.innerHTML = snapshot.val();
+  });
+};
+function disable(b, box){
+  onValue(ref(database, `holder/-OLF616Zr5LkBeORsx30/${b}`), (snapshot)=>{
+    if(snapshot.val() != " "){
+      box.disabled = true;
+    };
+  });
+};
+let values = [ " ", " ", " ", " ", " ", " ", " ", " ", " " ];
+function valueset(b, i){
+  onValue(ref(database, `holder/-OLF616Zr5LkBeORsx30/${b}`), (snapshot)=>{
+    values[i] = snapshot.val();
+  });
+};
+function winfn(a, b, c){
+  if(values[a] != " " && values[b] != " " && values[c] != " "){
+    if(values[a] == values[b] && values[b] == values[c]){
+        
+      update(ref(database, "holder/-OLF616Zr5LkBeORsx30"),{
+        win: values[a]
+      });
+      
+      onValue(ref(database, `holder/-OLF616Zr5LkBeORsx30/win`), (snapshot)=>{
+        document.getElementById("winp").innerText = `The winner is ${snapshot.val()}`;
+        console.log(snapshot.val());
+        document.getElementById("board").style.display = "none";
+        document.getElementById("winner").style.display = "block";
+    });
+    };
+  };
+};
+function check(){
+  valueset("b1", 0);
+  valueset("b2", 1);
+  valueset("b3", 2);
+  valueset("b4", 3);
+  valueset("b5", 4);
+  valueset("b6", 5);
+  valueset("b7", 6);
+  valueset("b8", 7);
+  valueset("b9", 8);
+  
+  winfn(0, 1, 2);
+  winfn(0, 3, 6);
+  winfn(0, 4, 8);
+  winfn(2, 5, 8);
+  winfn(2, 4, 6);
+  winfn(1, 4, 7);
+  winfn(3, 4, 5);
+  winfn(6, 7, 8);
+};
+
+function updateAll(){
+  updateA("b1", box1);
+  updateA("b2", box2);
+  updateA("b3", box3);
+  updateA("b4", box4);
+  updateA("b5", box5);
+  updateA("b6", box6);
+  updateA("b7", box7);
+  updateA("b8", box8);
+  updateA("b9", box9);
+
+  disable("b1", box1);
+  disable("b2", box2);
+  disable("b3", box3);
+  disable("b4", box4);
+  disable("b5", box5);
+  disable("b6", box6);
+  disable("b7", box7);
+  disable("b8", box8);
+  disable("b9", box9);
+
+  check();
+};
+update(ref(database, "holder/-OLF616Zr5LkBeORsx30"),{
+  b1: " ",
+  b2: " ",
+  b3: " ",
+  b4: " ",
+  b5: " ",
+  b6: " ",
+  b7: " ",
+  b8: " ",
+  b9: " ",
+  win: " "
+});
+
+
+let player = " ";
+function selectXY(P){
+  player = P;
+  console.log(player);
+  document.getElementById("inputXY").style.display = "none";
+  document.getElementById("board").style.display = "block";
+};
+document.getElementById("btnX").addEventListener("click", function(){selectXY("X")});
+document.getElementById("btnY").addEventListener("click", function(){selectXY("Y")});
+document.getElementById("loader").style.display = "none";
+
+
+
+
+/*
+step 1: When a button is pressed it will update all cells and will change itself
+ */
+
+updateAll();
+//code for box1
+box1.addEventListener("click", function(){
+  update(ref(database, "holder/-OLF616Zr5LkBeORsx30"),{
+    b1: player
+  });
+  updateAll();
+});
+
+//code for box2
+box2.addEventListener("click", function(){
+  update(ref(database, "holder/-OLF616Zr5LkBeORsx30"),{
+    b2: player
+  });
+  updateAll();
+});
+
+//code for box3
+box3.addEventListener("click", function(){
+  update(ref(database, "holder/-OLF616Zr5LkBeORsx30"),{
+    b3: player
+  });
+  updateAll();
+});
+
+//code for box4
+box4.addEventListener("click", function(){
+  update(ref(database, "holder/-OLF616Zr5LkBeORsx30"),{
+    b4: player
+  });
+  updateAll();
+});
+
+//code for box5
+box5.addEventListener("click", function(){
+  update(ref(database, "holder/-OLF616Zr5LkBeORsx30"),{
+    b5: player
+  });
+  updateAll();
+});
+
+//code for box6
+box6.addEventListener("click", function(){
+  update(ref(database, "holder/-OLF616Zr5LkBeORsx30"),{
+    b6: player
+  });
+  updateAll();
+});
+
+//code for box7
+box7.addEventListener("click", function(){
+  update(ref(database, "holder/-OLF616Zr5LkBeORsx30"),{
+    b7: player
+  });
+  updateAll();
+});
+
+//code for box8
+box8.addEventListener("click", function(){
+  update(ref(database, "holder/-OLF616Zr5LkBeORsx30"),{
+    b8: player
+  });
+  updateAll();
+});
+
+//code for box9
+box9.addEventListener("click", function(){
+  update(ref(database, "holder/-OLF616Zr5LkBeORsx30"),{
+    b9: player
+  });
+  updateAll();
+});
+
+
+
